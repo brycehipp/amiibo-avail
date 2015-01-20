@@ -64,16 +64,6 @@ function lookupProduct ( product ) {
             }
             console.info("Sent to postmark for delivery")
           });
-          sendgrid.send({
-            to: 'stiffhipp@gmail.com',
-            from: 'stiffhipp@gmail.com',
-            subject: '[Amazon Avail] Found '+product.name,
-            text: product.name+' has been found for '+price+'!\n\n<a href="'+product.url+'">GET NOW!</a>'
-          }, function( err, json ) {
-            if ( err ) {
-              console.error( err );
-            }
-          });
         }
 
       } else {
