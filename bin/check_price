@@ -11,10 +11,10 @@ process.stdout.write( '\n=====>\tScrape started!\n' );
 
 var i = 0,
     products = [
-      {
-        'name': 'Merth',
-        'url' : 'http://amzn.com/B00N4ABOXU'
-      },
+      // {
+      //   'name': 'Merth',
+      //   'url' : 'http://amzn.com/B00N4ABOXU'
+      // },
       {
         'name': 'Villager',
         'url' : 'http://amzn.com/B00N4ABMUA'
