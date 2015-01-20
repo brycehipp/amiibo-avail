@@ -6,6 +6,7 @@ var express = require('express'),
     cheerio = require('cheerio'),
     colors = require( 'colors' ),
     console = require('better-console'),
+    mandrill = require('node-mandrill')(process.env.MANDRILL_APIKEY),
     app = express();
 
 app.set('port', (process.env.PORT || 5000));
@@ -56,6 +57,24 @@ app.get('/scrape', function(req, res) {
 
           process.stdout.write( '\t'+product.name+':  '+String('$'+price).blue.bold+'\t'+foundText+'\n' );
 
+          if ( isFound ) {
+            mandrill('/messages/send', {
+              message: {
+                to: [
+                  { email: 'stiffhipp@gmail.com', name: 'Bryce Hipp' },
+                  { email: 'michael.klodzinski@gmail.com', name: 'Michael Klodzinski' }
+                ],
+                from_email: 'amiibo.finder@amazon-avail.herokuapp.com',
+                subject: '[Amiibo Finder] Found '+product.name,
+                text: product.name+' has been found for '+price+'!\n\n'+product.url
+              }
+            }, function(error, response)
+            {
+              //uh oh, there was an error
+              if (error) console.error( JSON.stringify(error) );
+            });
+          }
+
         } else {
           console.error( '\tError looking up'+product.name );
           console.error( error );
@@ -69,6 +88,7 @@ app.get('/scrape', function(req, res) {
   };
 
   lookupProduct( products[0] );
+
   res.send( 'Scrap started!' );
 });
 

@@ -1,7 +1,7 @@
 {
-  "name": "amazon-avail",
+  "name": "amiibo-finder",
   "version": "0.1.2",
-  "description": "Check availablity of an amazon product",
+  "description": "Check availablity of an amiibo on amazon",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
@@ -11,9 +11,10 @@
     "cheerio": "^0.18.0",
     "colors": "^1.0.3",
     "express": "~4.9.x",
+    "mandrill": "^0.1.0",
+    "node-mandrill": "^1.0.1",
     "pg": "^4.2.0",
-    "request": "^2.51.0",
-    "sendgrid": "^1.5.0"
+    "request": "^2.51.0"
   },
   "engines": {
     "node": "0.10.x"

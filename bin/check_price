@@ -4,12 +4,8 @@ var pg = require('pg'),
     request = require('request'),
     cheerio = require('cheerio'),
     colors = require( 'colors' ),
-    console = require('better-console');
-
-var sendgrid  = require('sendgrid')(
-  process.env.SENDGRID_USERNAME,
-  process.env.SENDGRID_PASSWORD
-);
+    console = require('better-console'),
+    mandrill = require('node-mandrill')(process.env.MANDRILL_APIKEY),;
 
 process.stdout.write( '\n=====>\tScrape started!\n' );
 
@@ -51,15 +47,20 @@ function lookupProduct ( product ) {
         process.stdout.write( '\t'+product.name+':  '+String('$'+price).blue.bold+'\t'+foundText+'\n' );
 
         if ( isFound ) {
-          sendgrid.send({
-            to: ['stiffhipp@gmail.com', 'michael.klodzinski@gmail.com'],
-            from: 'amiibo.finder@amazon-avail.herokuapp.com',
-            subject: '[Amazon Avail] Found '+product.name,
-            text: product.name+' has been found for '+price+'!\n\n<a href="'+product.url+'">GET NOW!</a>'
-          }, function( err, json ) {
-            if ( err ) {
-              console.error( err );
+          mandrill('/messages/send', {
+            message: {
+              to: [
+                { email: 'stiffhipp@gmail.com', name: 'Bryce Hipp' },
+                { email: 'michael.klodzinski@gmail.com', name: 'Michael Klodzinski' }
+              ],
+              from_email: 'amiibo.finder@amazon-avail.herokuapp.com',
+              subject: '[Amiibo Finder] Found '+product.name,
+              text: product.name+' has been found for '+price+'!\n\n'+product.url
             }
+          }, function(error, response)
+          {
+            //uh oh, there was an error
+            if (error) console.error( JSON.stringify(error) );
           });
         }
 
