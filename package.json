@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "better-console": "^0.2.3",
+    "cheerio": "^0.18.0",
     "colors": "^1.0.3",
     "express": "~4.9.x",
     "pg": "^4.2.0",
