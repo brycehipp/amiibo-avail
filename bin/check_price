@@ -6,18 +6,7 @@ var sendgrid  = require('sendgrid')(
   process.env.SENDGRID_PASSWORD
 );
 
-pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-  var handleError = function(err) {
-    if(!err) return false;
-    done(client);
-    next(err);
-    return true;
-  };
-
-  done();
-  pg.end();
-
-});
+console.log('Hi there!')
 
 sendgrid.send({
   to: 'stiffhipp@gmail.com',
