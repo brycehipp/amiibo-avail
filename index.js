@@ -40,15 +40,12 @@ app.get('/scrape', function(req, res) {
 
     if ( i <= products.length ) {
 
-      process.stdout.write( '\tLooking up '+product.name+':\r' );
+      process.stdout.write( '\t'+product.name+':\r' );
 
       request.get( product.url, function(error, response, html) {
 
         // First we'll check to make sure no errors occurred when making the request
         if ( !error ) {
-
-          process.stdout.clearLine();  // clear current text
-          process.stdout.cursorTo(0);
 
           var $ = cheerio.load( html );
 
