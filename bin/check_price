@@ -5,7 +5,7 @@ var pg = require('pg'),
     cheerio = require('cheerio'),
     colors = require( 'colors' ),
     console = require('better-console'),
-    mandrill = require('node-mandrill')(process.env.MANDRILL_APIKEY),;
+    mandrill = require('node-mandrill')(process.env.MANDRILL_APIKEY);
 
 process.stdout.write( '\n=====>\tScrape started!\n' );
 
