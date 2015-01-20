@@ -6,7 +6,10 @@ var pg = require('pg'),
     colors = require( 'colors' ),
     console = require('better-console');
 
-var postmark = require("postmark")( process.env.POSTMARK_API_TOKEN );
+var sendgrid  = require('sendgrid')(
+  process.env.SENDGRID_USERNAME,
+  process.env.SENDGRID_PASSWORD
+);
 
 process.stdout.write( '\n=====>\tScrape started!\n' );
 
@@ -52,17 +55,15 @@ function lookupProduct ( product ) {
         process.stdout.write( '\t'+product.name+':  '+String('$'+price).blue.bold+'\t'+foundText+'\n' );
 
         if ( isFound ) {
-          postmark.send({
-            "From": "amiibo.finder@amazon-avail.com",
-            "To": "stiffhipp@gmail.com",
-            "Subject": '[Amazon Avail] Found '+product.name,
-            "TextBody": product.name+' has been found for '+price+'!\n\n<a href="'+product.url+'">GET NOW!</a>'
-          }, function(error, success) {
-            if( error ) {
-              console.error("Unable to send via postmark: " + error.message);
-             return;
+          sendgrid.send({
+            to: 'stiffhipp@gmail.com',
+            from: 'stiffhipp@gmail.com',
+            subject: '[Amazon Avail] Found '+product.name,
+            text: product.name+' has been found for '+price+'!\n\n<a href="'+product.url+'">GET NOW!</a>'
+          }, function( err, json ) {
+            if ( err ) {
+              console.error( err );
             }
-            console.info("Sent to postmark for delivery")
           });
         }
 
