@@ -56,7 +56,7 @@ function lookupProduct ( product ) {
 
         if ( isFound ) {
           sendgrid.send({
-            to: 'stiffhipp@gmail.com;michael.klodzinski@gmail.com',
+            to: ['stiffhipp@gmail.com', 'michael.klodzinski@gmail.com'],
             from: 'amiibo.finder@amazon-avail.herokuapp.com',
             subject: '[Amazon Avail] Found '+product.name,
             text: product.name+' has been found for '+price+'!\n\n<a href="'+product.url+'">GET NOW!</a>'
