@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 
-var pg = require('pg');
+var pg = require('pg'),
+    request = require('request'),
+    cheerio = require('cheerio'),
+    colors = require( 'colors' ),
+    console = require('better-console'),;
 var sendgrid  = require('sendgrid')(
   process.env.SENDGRID_USERNAME,
   process.env.SENDGRID_PASSWORD
 );
-
-console.log('Hi there!')
 
 process.stdout.write( '\n=====>\tScrape started!\n' );
 
