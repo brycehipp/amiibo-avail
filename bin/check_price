@@ -8,13 +8,75 @@ var sendgrid  = require('sendgrid')(
 
 console.log('Hi there!')
 
-sendgrid.send({
-  to: 'stiffhipp@gmail.com',
-  from: 'stiffhipp@gmail.com',
-  subject: 'There are some items to do',
-  text: 'You have items to do'
-  }, function(err, json) {
-    if (err) {
-      console.error(err);
-    }
-});
+process.stdout.write( '\n=====>\tScrape started!\n' );
+
+var i = 0,
+    products = [
+      {
+        'name': 'Merth',
+        'url' : 'http://amzn.com/B00N4ABOXU'
+      },
+      {
+        'name': 'Villager',
+        'url' : 'http://amzn.com/B00N4ABMUA'
+      },
+      {
+        'name': 'WFT',
+        'url' : 'http://amzn.com/B00N49EERY'
+      },
+      {
+        'name': 'Mario',
+        'url' : 'http://amzn.com/B00N4ABMG4'
+      }
+    ];
+
+function lookupProduct ( product ) {
+  i++;
+
+  if ( i <= products.length ) {
+
+    process.stdout.write( '\tLooking up '+product.name+':\r' );
+
+    request.get( product.url, function(error, response, html) {
+
+      // First we'll check to make sure no errors occurred when making the request
+      if ( !error ) {
+
+        process.stdout.clearLine();  // clear current text
+        process.stdout.cursorTo(0);
+
+        var $ = cheerio.load( html );
+
+        // Attempt to grab the price of the product. Will be 0 if not found.
+        var price = Number( $('#actualPriceValue').text().replace(/[^0-9\.]+/g,"") ),
+            isFound = price > 0 && price < 13,
+            foundText = isFound ? String('FOUND!').green.bold : '';
+
+        process.stdout.write( '\t'+product.name+':  '+String('$'+price).blue.bold+'\t'+foundText+'\n' );
+
+        if ( isFound ) {
+          sendgrid.send({
+            to: 'stiffhipp@gmail.com',
+            from: 'stiffhipp@gmail.com',
+            subject: '[Amazon Avail] Found '+product.name,
+            text: product.name+' has been found for '+price'+!\n\n<a href="'+product.url+'">GET NOW!</a>'
+          }, function( err, json ) {
+            if ( err ) {
+              console.error( err );
+            }
+          });
+        }
+
+      } else {
+        console.error( '\tError looking up'+product.name );
+        console.error( error );
+      }
+
+      lookupProduct( products[i] );
+    } );
+  } else {
+    process.stdout.write( '=====>\tScrape completed!\n' );
+  }
+};
+
+lookupProduct( products[0] );
