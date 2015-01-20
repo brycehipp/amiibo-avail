@@ -26,10 +26,6 @@ var i = 0,
       {
         'name': 'WFT',
         'url' : 'http://amzn.com/B00N49EERY'
-      },
-      {
-        'name': 'Mario',
-        'url' : 'http://amzn.com/B00N4ABMG4'
       }
     ];
 
