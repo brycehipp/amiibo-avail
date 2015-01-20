@@ -54,7 +54,8 @@ app.get('/scrape', function(req, res) {
 
           // Attempt to grab the price of the product. Will be 0 if not found.
           var price = Number( $('#actualPriceValue').text().replace(/[^0-9\.]+/g,"") ),
-              foundText = price > 0 && price < 13 ? String('FOUND!').green.bold : '';
+              isFound = price > 0 && price < 13,
+              foundText = isFound ? String('FOUND!').green.bold : '';
 
           process.stdout.write( '\t'+product.name+':  '+String('$'+price).blue.bold+'\t'+foundText+'\n' );
 
