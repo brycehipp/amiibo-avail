@@ -1,7 +1,28 @@
 #!/usr/bin/env node
 
-function sayHello() {
-  console.log('Hello');
-}
-sayHello();
-exit();
+var pg = require('pg');
+var sendgrid  = require('sendgrid')(
+  process.env.SENDGRID_USERNAME,
+  process.env.SENDGRID_PASSWORD
+);
+
+pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+  var handleError = function(err) {
+    if(!err) return false;
+    done(client);
+    next(err);
+    return true;
+  };
+
+  sendgrid.send({
+    to: 'stiffhipp@gmail.com',
+    from: 'stiffhipp@gmail.com',
+    subject: 'There are some items to do',
+    text: 'You have items to do'
+    }, function(err, json) {
+      if (err) {
+        console.error(err);
+      }
+  });
+
+});
